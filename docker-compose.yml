@@ -75,6 +75,14 @@ services:
     volumes:
       - ./logstash.conf:/usr/share/logstash/pipeline/logstash.conf
 
+  filebeat:
+    image: docker.elastic.co/beats/filebeat:8.6.0
+    environment:
+      - LOGSTASH_HOSTS=http://logstash:5044
+    volumes:
+      - /var/log:/host/var/log:ro  # Mount the host log directory
+      - ./filebeat.yml:/etc/filebeat/filebeat.yml  # Mount the filebeat.yml config
+
 # this defines the volume to permanently store the elasticsearch container data.
 volumes:
    esdata:
