@@ -25,7 +25,7 @@ services:
       - ./esdata:/usr/share/elasticsearch/data
     # this will allow access to the content from outside the container
     ports:
-      - 127.0.0.1:9200:9200
+      - 9200:9200
     environment:
       - discovery.type=single-node
       - cluster.name=elasticsearch
@@ -40,7 +40,7 @@ services:
     image: docker.elastic.co/kibana/kibana:8.15.1
     container_name: kibana
     ports:
-      - 127.0.0.1:5601:5601
+      - 5601:5601
     environment:
       # remember the container_name for elasticsearch?
       # we use it here to access that container
@@ -64,7 +64,7 @@ services:
         echo "Starting logstash";
         /usr/share/logstash/bin/logstash -f /usr/share/logstash/pipeline/logstash.conf
     ports:
-      - 127.0.0.1:5044:5044
+      - 5044:5044
       # Secure option would be:
       # - 127.0.0.1:5044:5044
     environment:
@@ -74,14 +74,6 @@ services:
       - ELASTIC_HOSTS=http://elasticsearch:9200
     volumes:
       - ./logstash.conf:/usr/share/logstash/pipeline/logstash.conf
-
-  filebeat:
-    image: docker.elastic.co/beats/filebeat:8.6.0
-    environment:
-      - LOGSTASH_HOSTS=http://logstash:5044
-    volumes:
-      - /var/log:/host/var/log:ro  # Mount the host log directory
-      - ./filebeat.yml:/etc/filebeat/filebeat.yml  # Mount the filebeat.yml config
 
 # this defines the volume to permanently store the elasticsearch container data.
 volumes:

@@ -1,0 +1,14 @@
+FROM docker.elastic.co/beats/filebeat:8.6.0
+
+COPY filebeat.yml /usr/share/filebeat/filebeat.yml
+
+
+# Ensure config file permissions are correct
+USER root
+RUN chown root:filebeat /usr/share/filebeat/filebeat.yml
+
+# Switch back to filebeat user
+USER filebeat
+
+ENTRYPOINT ["/usr/share/filebeat/filebeat"]
+CMD ["-e", "-strict.perms=false"]
