@@ -35,7 +35,13 @@ docker-compose ps
 ### 3.Start Filebeat
 ```bash
 # Start filebeat
-docker-compose up -d filebeat
+docker build -t custom_filebeat -f Dockerfile.filebeat .
+
+docker run --name filebeat \\
+  --user=root \\
+  -v "$HOME/logs:/logs:ro" \\
+  custom_filebeat\
+
 ```
 
 ### 4. Access Services
